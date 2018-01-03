@@ -1,3 +1,0 @@
-node1.example.com:9200
-node2.example.com:9200
-node3.example.com:9200

@@ -6,17 +6,17 @@ This is a simple script to do a controlled rolling restart of a multinode elasti
 
 * -m - MASTER - The master node to use for coordinating the update.
 * -n - NODE_FILE - A file containing the list of node hostnames one per line.
-* -s - SCRIPT - Script to run on each node to process the update. 
-
+* -s - SCRIPT - Script to run on each node to process the update.
+* -d - SHUTDOWN_SCRIPT - Script to run to stop elasticsearch node.
 ```
-# ./rolling-restart.sh -m master1.example.com:9200 -n ./node-list.txt -s ./node-update.sh
+# ./rolling-restart.sh -m master1.example.com:9200 -n ./node-list.txt -s ./node-update.sh -d ./shutdown-script.sh
 ```
 
 ### NODE_FILE
 
 The node file is a list of node names (including HTTP port) one per line. These should only be nodes that contain data and the node list should not contain the host you're using as the master node.
 
-NOTE: If you have dedicated master nodes, don't include them in the list. This script's primary purpose is to manage shard allocation which isn't necessary when restarting a dedicated master node. 
+NOTE: If you have dedicated master nodes, don't include them in the list. This script's primary purpose is to manage shard allocation which isn't necessary when restarting a dedicated master node.
 
 ```
 node1.example.com:9200
@@ -34,6 +34,8 @@ Two variables are made available to the script.
 
 * $MASTER is the master node as provided on the command line.
 * $NODE is the name of the node being restarted. This name will include the port.
+* $HOST is the hostname
+* $PORT is the port
 
 ```
 #!/bin/bash
@@ -41,7 +43,7 @@ echo "Running updates on $NODE"
 
 # Whatever commands are required should go here.
 
-# Those commands should include starting the elasticsearch 
+# Those commands should include starting the elasticsearch
 # instance once updates are complete.
 
 exit 0
